@@ -200,6 +200,16 @@
   details[open] summary::after{content:"–"}
   details p{font-size:13px;color:#4a463e;margin-top:12px}
 
+  /* OCCASION COLLECTION PAGE */
+  .occpage{position:fixed;inset:0;background:var(--bone);z-index:80;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .35s}
+  .occpage.open{opacity:1;visibility:visible}
+  .occpage-bar{position:sticky;top:0;background:rgba(247,244,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:16px 32px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+  .occpage-bar .back{font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;background:none;border:none;font-family:var(--sans)}
+  .occpage-head{max-width:1380px;margin:0 auto;padding:48px 32px 0}
+  .occpage-head .crumb{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .occpage-head h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,4vw,46px)}
+  .occpage .cats{max-width:1380px;margin:0 auto;padding:40px 32px 90px}
+
   /* OUR WORLD */
   .ow{position:fixed;inset:0;background:var(--bone);z-index:85;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .35s}
   .ow.open{opacity:1;visibility:visible}
@@ -341,10 +351,10 @@
 <section class="sec" style="padding-top:0">
   <h2 class="sec-title">Gifting Made Easy For All Occasions</h2>
   <div class="occ">
-    <div class="block" onclick="toast('Birthday')"><div class="fill o1"></div><span>Birthday</span></div>
-    <div class="block" onclick="toast('Anniversary')"><div class="fill o2"></div><span>Anniversary</span></div>
-    <div class="block" onclick="toast('Festive')"><div class="fill o3"></div><span>Festive</span></div>
-    <div class="block" onclick="toast('House Warming')"><div class="fill o4"></div><span>House Warming</span></div>
+    <div class="block" onclick="openOccasion('Birthday')"><div class="fill o1"></div><span>Birthday</span></div>
+    <div class="block" onclick="openOccasion('Anniversary')"><div class="fill o2"></div><span>Anniversary</span></div>
+    <div class="block" onclick="openOccasion('Festive')"><div class="fill o3"></div><span>Festive</span></div>
+    <div class="block" onclick="openOccasion('House Warming')"><div class="fill o4"></div><span>House Warming</span></div>
   </div>
 </section>
 
@@ -388,7 +398,7 @@
     </div>
     <div><h4>Shop</h4><ul><li><a onclick="scrollToShop()">Gift Bag</a></li><li><a onclick="scrollToShop()">Gift Pouch</a></li><li><a onclick="scrollToShop()">Gift Box</a></li><li><a onclick="scrollToShop()">Wine Bags</a></li></ul></div>
     <div><h4>Company</h4><ul><li><a onclick="openWorld()">Our World</a></li><li><a onclick="openContact()">Contact Us</a></li><li><a onclick="openWorld()">Know Us</a></li></ul></div>
-    <div><h4>Occasions</h4><ul><li><a>Birthday</a></li><li><a>Anniversary</a></li><li><a>Festive</a></li><li><a>House Warming</a></li></ul></div>
+    <div><h4>Occasions</h4><ul><li><a onclick="openOccasion('Birthday')">Birthday</a></li><li><a onclick="openOccasion('Anniversary')">Anniversary</a></li><li><a onclick="openOccasion('Festive')">Festive</a></li><li><a onclick="openOccasion('House Warming')">House Warming</a></li></ul></div>
   </div>
   <div class="foot-bottom">
     <span>© 2026 Ukiyo</span>
@@ -468,6 +478,19 @@
       <details><summary>Shipping &amp; returns</summary><p>Dispatched within 3–5 working days across India. Unused items can be returned within 14 days.</p></details>
     </div>
   </div>
+</div>
+
+<!-- OCCASION COLLECTION -->
+<div class="occpage" id="occpage">
+  <div class="occpage-bar">
+    <button class="back" onclick="closeOccasion()">← Back to shop</button>
+    <a class="back" onclick="openCart()">Cart <span id="count3">(0)</span></a>
+  </div>
+  <div class="occpage-head">
+    <div class="crumb" id="occCrumb">Shop</div>
+    <h1 id="occTitle">—</h1>
+  </div>
+  <div class="cats" id="occGrid"></div>
 </div>
 
 <!-- OUR WORLD -->
@@ -555,16 +578,16 @@
     return '';
   };
   const products = [
-    {name:"Gift Bag",cat:"Gift Bag",price:180,shape:"bag",pat:"pat-dots",desc:"A structured gift bag with rope handles and a hand-tied tag. Our signature polka motif.",patterns:["Polka","Chevron","Grid"],sizes:["Small","Medium","Large"]},
-    {name:"Gift Pouch",cat:"Gift Pouch",price:120,shape:"pouch",pat:"pat-chevron",desc:"A cinched paper pouch for smaller gifts and keepsakes, finished with a tied band.",patterns:["Chevron","Polka","Grid"],sizes:["Small","Medium"]},
-    {name:"Gift Box",cat:"Gift Box",price:450,shape:"box",pat:"pat-plain",desc:"A rigid gift box tied with a crossed ribbon — built to be kept long after the occasion.",patterns:["Ribbon","Grosgrain"],sizes:["Small","Medium","Large"]},
-    {name:"Wine Bags",cat:"Wine Bags",price:220,shape:"wine",pat:"pat-grid",desc:"A tall, slim bag sized for a bottle, with rope handles and kraft gift tags.",patterns:["Grid","Chevron","Polka"],sizes:["Single","Double"]}
+    {name:"Gift Bag",cat:"Gift Bag",price:180,shape:"bag",pat:"pat-dots",desc:"A structured gift bag with rope handles and a hand-tied tag. Our signature polka motif.",patterns:["Polka","Chevron","Grid"],sizes:["Small","Medium","Large"],occ:["Birthday","Festive"]},
+    {name:"Gift Pouch",cat:"Gift Pouch",price:120,shape:"pouch",pat:"pat-chevron",desc:"A cinched paper pouch for smaller gifts and keepsakes, finished with a tied band.",patterns:["Chevron","Polka","Grid"],sizes:["Small","Medium"],occ:["Birthday","Anniversary"]},
+    {name:"Gift Box",cat:"Gift Box",price:450,shape:"box",pat:"pat-plain",desc:"A rigid gift box tied with a crossed ribbon — built to be kept long after the occasion.",patterns:["Ribbon","Grosgrain"],sizes:["Small","Medium","Large"],occ:["Anniversary","House Warming"]},
+    {name:"Wine Bags",cat:"Wine Bags",price:220,shape:"wine",pat:"pat-grid",desc:"A tall, slim bag sized for a bottle, with rope handles and kraft gift tags.",patterns:["Grid","Chevron","Polka"],sizes:["Single","Double"],occ:["Festive","House Warming"]}
   ];
   const bundleData = [
-    {name:"Bundle 1",cat:"Bundle",price:640,shape:"bag",pat:"pat-dots",desc:"An assorted set of gift bags to keep you gifting-ready for any occasion.",patterns:["Mixed"],sizes:["Set of 4"]},
-    {name:"Bundle 2",cat:"Bundle",price:520,shape:"pouch",pat:"pat-chevron",desc:"A ready-to-gift mix of pouches in our signature patterns.",patterns:["Mixed"],sizes:["Set of 4"]},
-    {name:"Bundle 3",cat:"Bundle",price:980,shape:"box",pat:"pat-plain",desc:"A curated bundle of gift boxes with ribbon ties.",patterns:["Mixed"],sizes:["Set of 3"]},
-    {name:"Bundle 4",cat:"Bundle",price:720,shape:"wine",pat:"pat-grid",desc:"Wine bags with kraft tags — perfect for hosts and house warmings.",patterns:["Mixed"],sizes:["Set of 3"]}
+    {name:"Bundle 1",cat:"Bundle",price:640,shape:"bag",pat:"pat-dots",desc:"An assorted set of gift bags to keep you gifting-ready for any occasion.",patterns:["Mixed"],sizes:["Set of 4"],occ:["Birthday"]},
+    {name:"Bundle 2",cat:"Bundle",price:520,shape:"pouch",pat:"pat-chevron",desc:"A ready-to-gift mix of pouches in our signature patterns.",patterns:["Mixed"],sizes:["Set of 4"],occ:["Anniversary"]},
+    {name:"Bundle 3",cat:"Bundle",price:980,shape:"box",pat:"pat-plain",desc:"A curated bundle of gift boxes with ribbon ties.",patterns:["Mixed"],sizes:["Set of 3"],occ:["Festive"]},
+    {name:"Bundle 4",cat:"Bundle",price:720,shape:"wine",pat:"pat-grid",desc:"Wine bags with kraft tags — perfect for hosts and house warmings.",patterns:["Mixed"],sizes:["Set of 3"],occ:["House Warming"]}
   ];
   const all=[...products,...bundleData];
   const inr=n=>"₹"+n.toLocaleString("en-IN");
@@ -579,9 +602,21 @@
   document.getElementById('burger').onclick=()=>mm.classList.toggle('open');
   function closeMenu(){mm.classList.remove('open')}
 
-  function goHome(){closeWorld();closeProduct();closeContact();window.scrollTo({top:0,behavior:'smooth'})}
-  function scrollToShop(){closeWorld();closeProduct();document.getElementById('shop').scrollIntoView({behavior:'smooth'})}
-  function scrollToContact(){closeWorld();closeProduct();document.getElementById('contact').scrollIntoView({behavior:'smooth'})}
+  function goHome(){closeWorld();closeProduct();closeContact();closeOccasion();window.scrollTo({top:0,behavior:'smooth'})}
+  function scrollToShop(){closeWorld();closeProduct();closeOccasion();document.getElementById('shop').scrollIntoView({behavior:'smooth'})}
+  function scrollToContact(){closeWorld();closeProduct();closeOccasion();document.getElementById('contact').scrollIntoView({behavior:'smooth'})}
+
+  function openOccasion(name){
+    closeWorld();closeProduct();closeContact();
+    const items=all.map((p,i)=>({p,i})).filter(({p})=>p.occ&&p.occ.includes(name));
+    document.getElementById('occTitle').textContent=name;
+    document.getElementById('occCrumb').textContent="Shop / "+name;
+    document.getElementById('occGrid').innerHTML=items.length
+      ? items.map(({p,i})=>tileHTML(p,i)).join('')
+      : '<p style="grid-column:1/-1;text-align:center;color:var(--muted)">No items in this collection yet.</p>';
+    document.getElementById('occpage').classList.add('open');document.body.style.overflow='hidden';document.getElementById('occpage').scrollTop=0;closeMenu();
+  }
+  function closeOccasion(){document.getElementById('occpage').classList.remove('open');document.body.style.overflow=''}
 
   function renderCart(){
     const body=document.getElementById('cartBody');
@@ -589,7 +624,7 @@
     else{body.innerHTML=cart.map((it,i)=>`<div class="line-item"><div class="li-img">${visual(it.shape,it.pat)}</div><div style="flex:1"><div class="li-name">${it.name}</div><div class="li-var">${it.pattern} · ${it.size}</div><div class="li-price">${inr(it.price)} &nbsp; <a onclick="removeItem(${i})" style="cursor:pointer;color:var(--muted);font-size:12px;border-bottom:1px solid var(--muted)">Remove</a></div></div></div>`).join('')}
     const sub=cart.reduce((s,i)=>s+i.price,0);
     document.getElementById('subtotal').textContent=inr(sub);
-    const c=`(${cart.length})`;document.getElementById('count').textContent=c;document.getElementById('count2').textContent=c;
+    const c=`(${cart.length})`;document.getElementById('count').textContent=c;document.getElementById('count2').textContent=c;document.getElementById('count3').textContent=c;
   }
   function removeItem(i){cart.splice(i,1);renderCart()}
   function openCart(){document.getElementById('drawer').classList.add('open');document.getElementById('scrim').classList.add('open')}
@@ -621,7 +656,7 @@
   setInterval(()=>{slides[ci].classList.remove('active');ci=(ci+1)%slides.length;slides[ci].classList.add('active')},2600);
 
   let tT;function toast(msg){const t=document.getElementById('toastEl');t.textContent=msg;t.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>t.classList.remove('show'),2200)}
-  addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();closeProduct();closeWorld();closeContact()}});
+  addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();closeProduct();closeWorld();closeContact();closeOccasion()}});
 </script>
 </body>
 </html>
