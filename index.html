@@ -631,6 +631,7 @@
   function closeCart(){document.getElementById('drawer').classList.remove('open');document.getElementById('scrim').classList.remove('open')}
 
   function openProduct(i){
+    closeOccasion();closeWorld();
     current=i;selPat=0;selSize=0;const p=all[i];
     document.getElementById('pdpName').textContent=p.name;
     document.getElementById('pdpCrumb').textContent="Shop / "+p.cat;
